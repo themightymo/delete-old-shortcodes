@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Delete Old Shortcodes
  * Plugin URI: https://themightymo.com
- * Description: Permanently deletes specified shortcodes from all post content. Use the admin page under "Tools" to trigger the deletion.
+ * Description: Permanently deletes Fusion Builder and Visual Composer shortcodes from all post content. Use the admin page under "Tools" to trigger the deletion.
  * Version: 1.0.0
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://themightymo.com

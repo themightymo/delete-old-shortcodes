@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Delete Old Shortcodes
  * Plugin URI: https://themightymo.com
- * Description: Permanently deletes Fusion Builder and Visual Composer shortcodes from all post content. Use the admin page under "Tools" to trigger the deletion.
+ * Description: Permanently deletes specified shortcodes from all post content. Use the admin page under "Tools" to trigger the deletion.
  * Version: 1.0.0
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://themightymo.com
@@ -28,7 +28,8 @@ class Delete_Old_Shortcodes {
         'fusion_text',
         'fsn_row',
         'fsn_column',
-        'fsn_text'
+        'fsn_text',
+        'fusion_blog' // <-- Added this line
     ];
 
     public function __construct() {
@@ -85,12 +86,12 @@ class Delete_Old_Shortcodes {
     }
 
     private function delete_shortcodes_from_all_posts() {
-        // Get all posts (including pages, custom post types if needed)
+        // Get all posts
         $args = [
             'post_type'      => 'any',
             'posts_per_page' => -1,
             'post_status'    => 'any',
-            'fields'         => 'ids', // We only need IDs
+            'fields'         => 'ids',
         ];
 
         $post_ids = get_posts( $args );
@@ -113,13 +114,11 @@ class Delete_Old_Shortcodes {
         foreach ( $this->shortcodes as $shortcode ) {
             $shortcode_escaped = preg_quote( $shortcode, '/' );
 
-            // Remove paired shortcodes while preserving inner content
-            // [shortcode ...]Inner Content[/shortcode] -> Inner Content
+            // Remove paired shortcodes (preserving inner content)
             $pattern_with_closing = '/\[' . $shortcode_escaped . '[^\]]*\](.*?)\[\/' . $shortcode_escaped . '\]/s';
             $content = preg_replace( $pattern_with_closing, '$1', $content );
 
-            // Remove standalone shortcodes without closing tags
-            // [shortcode ...] -> (removed)
+            // Remove standalone shortcodes
             $pattern_standalone = '/\[' . $shortcode_escaped . '[^\]]*\]/';
             $content = preg_replace( $pattern_standalone, '', $content );
         }
